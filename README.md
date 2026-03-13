@@ -16,6 +16,9 @@ Główną funkcjonalnością jest **automatyczna klasyfikacja etapu rehabilitacj
 - Predykcja etapu rehabilitacji (`Ostra`, `Odbudowa`, `Funkcjonalna`, `Powrót do sportu`)  
 - Wskaźnik pewności predykcji  
 - Prosta wizualizacja wyników (wykres słupkowy lub pasek procentowy)  
+- Predykcja etapu rehabilitacji (`Ostra`, `Odbudowa`, `Funkcjonalna`, `Powrót do sportu`)
+- Wskaźnik pewności predykcji
+- Wizualizacja wyników (wykres słupkowy + pasek procentowy)
 - Model TensorFlow.js działający w przeglądarce (bez backendu)
 
 ---
@@ -26,6 +29,7 @@ Główną funkcjonalnością jest **automatyczna klasyfikacja etapu rehabilitacj
 - **Wizualizacja:** Chart.js / Recharts  
 - **Środowisko developerskie:** VS Code  
 - **Opcjonalnie backend:** Node.js + Express / NestJS (dla przechowywania danych pacjentów)
-
----
-
+## Stack technologiczny
+- **Frontend:** React + TypeScript, Vite
+- **AI:** TensorFlow.js
+- **Wizualizacja:** Recharts
