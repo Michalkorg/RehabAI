@@ -1,8 +1,3 @@
-diff --git a/README.md b/README.md
-index d99e373909d9877d0560c21e2a752c634eeeaee1..ce45952a66ad735a7e3bbca5893d15abdf9ea007 100644
---- a/README.md
-+++ b/README.md
-@@ -1,31 +1,47 @@
  # RehabAI – Webowa aplikacja wspomagająca rehabilitację z AI
  
  ## Opis projektu
