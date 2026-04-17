@@ -30,16 +30,40 @@ const softmax = (logits: number[]): number[] => {
 };
 
 const heuristicLogits = (input: PatientInput): number[] => {
-  const painScore = 10 - input.pain;
-  const functionScore = input.rom * 0.35 + input.strength * 6 + (100 - input.asymmetry) * 0.25;
-  const timeScore = Math.min(input.daysSinceInjury, 180);
+  const painRelief = 10 - input.pain;
+  const acuteTimeBoost = Math.max(0, 21 - input.daysSinceInjury);
 
-  return [
-    input.pain * 1.1 + (100 - input.rom) * 0.03 - timeScore * 0.02,
-    15 + painScore * 1.2 + functionScore * 0.02 + timeScore * 0.03,
-    10 + painScore * 1.4 + functionScore * 0.03 + timeScore * 0.05,
-    8 + painScore * 1.5 + functionScore * 0.035 + timeScore * 0.06,
-  ];
+  const acute =
+    input.pain * 2.2 +
+    (120 - input.rom) * 0.05 +
+    input.asymmetry * 0.03 +
+    acuteTimeBoost * 0.15 -
+    input.strength * 1.2;
+
+  const rebuilding =
+    painRelief * 0.9 +
+    input.rom * 0.04 +
+    input.strength * 0.5 +
+    (100 - input.asymmetry) * 0.02 +
+    input.daysSinceInjury * 0.05;
+
+  const functional =
+    painRelief * 1.1 +
+    input.rom * 0.05 +
+    input.strength * 0.7 +
+    (100 - input.asymmetry) * 0.03 +
+    input.daysSinceInjury * 0.08 -
+    4;
+
+  const returnToSport =
+    painRelief * 1.2 +
+    input.rom * 0.06 +
+    input.strength * 0.9 +
+    (100 - input.asymmetry) * 0.04 +
+    input.daysSinceInjury * 0.12 -
+    10;
+
+  return [acute, rebuilding, functional, returnToSport];
 };
 
 const estimateDaysToReturn = (input: PatientInput): number => {

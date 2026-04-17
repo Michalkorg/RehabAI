@@ -1,5 +1,3 @@
-export const rehabStages = ["Ostra", "Odbudowa", "Funkcjonalna", "Powrót do sportu"] as const;
+export const REHAB_LABELS = ['Ostra', 'Odbudowa', 'Funkcjonalna', 'Powrót do sportu'] as const;
 
-export type RehabStage = typeof rehabStages[number];
-
-export const REHAB_LABELS = rehabStages;
+export type RehabStage = (typeof REHAB_LABELS)[number];
