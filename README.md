@@ -1,6 +1,13 @@
+diff --git a/README.md b/README.md
+index d99e373909d9877d0560c21e2a752c634eeeaee1..709546f10ca1282075a00b931f0a978917b71ae0 100644
+--- a/README.md
++++ b/README.md
+@@ -1,31 +1,122 @@
  # RehabAI – Webowa aplikacja wspomagająca rehabilitację z AI
  
  ## Opis projektu
+-**RehabAI** to aplikacja webowa wspierająca fizjoterapeutów/lekarzy w procesie powrotu do pełnej sprawności po kontuzji.  
+-Główną funkcjonalnością jest **automatyczna klasyfikacja etapu rehabilitacji** na podstawie danych pacjenta przy użyciu **TensorFlow.js**. Projekt kładzie nacisk na podejście **AI-first**, a reszta aplikacji pełni rolę minimalistycznej powłoki do wprowadzania danych i wyświetlania wyników.
 +**RehabAI** to aplikacja webowa wspierająca fizjoterapeutów/lekarzy w procesie powrotu do sprawności po kontuzji.
 +Główną funkcjonalnością jest **automatyczna klasyfikacja etapu rehabilitacji** na podstawie danych pacjenta.
 +
@@ -8,6 +15,8 @@
  
  ---
  
+-## Funkcjonalności MVP
+-- Formularz do wprowadzania danych pacjenta:
 +## Funkcjonalności MVP+
 +- Rejestracja lekarza (imię i nazwisko, login, hasło)
 +- Logowanie lekarza loginem i hasłem
@@ -15,6 +24,14 @@
 +  - Imię pacjenta
    - Zakres ruchu (ROM)
    - Ból (VAS 0–10)
+-  - Siła mięśni
+-  - Asymetria lewa/prawa
+-  - Liczba dni od urazu
+-- Predykcja etapu rehabilitacji (`Ostra`, `Odbudowa`, `Funkcjonalna`, `Powrót do sportu`)  
+-- Wskaźnik pewności predykcji  
+-- Prosta wizualizacja wyników (wykres słupkowy lub pasek procentowy)  
+-- Model TensorFlow.js działający w przeglądarce (bez backendu)
++  - Siła mięśni (0–10)
 +  - Asymetria lewa/prawa (%)
 +  - Dni od urazu
 +- Predykcja etapu rehabilitacji:
@@ -35,7 +52,6 @@
 -- **Wizualizacja:** Chart.js / Recharts  
 -- **Środowisko developerskie:** VS Code  
 -- **Opcjonalnie backend:** Node.js + Express / NestJS (dla przechowywania danych pacjentów)
-
 +## Czy potrzebny jest token?
 +**Nie.**
 +
