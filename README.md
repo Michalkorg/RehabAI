@@ -1,32 +1,31 @@
-
  # RehabAI – Webowa aplikacja wspomagająca rehabilitację z AI
  
  ## Opis projektu
- **RehabAI** to aplikacja webowa wspierająca fizjoterapeutów/lekarzy w procesie powrotu do pełnej sprawności po kontuzji.  
- Główną funkcjonalnością jest **automatyczna klasyfikacja etapu rehabilitacji** na podstawie danych pacjenta przy użyciu **TensorFlow.js**. Projekt kładzie nacisk na podejście **AI-first**, a reszta aplikacji pełni rolę minimalistycznej powłoki do wprowadzania danych i wyświetlania wyników.
++**RehabAI** to aplikacja webowa wspierająca fizjoterapeutów/lekarzy w procesie powrotu do sprawności po kontuzji.
++Główną funkcjonalnością jest **automatyczna klasyfikacja etapu rehabilitacji** na podstawie danych pacjenta.
++
++Model działa po stronie przeglądarki (TensorFlow.js), a aplikacja nie wymaga backendu.
  
  ---
  
--## Funkcjonalności MVP
 +## Funkcjonalności MVP+
 +- Rejestracja lekarza (imię i nazwisko, login, hasło)
 +- Logowanie lekarza loginem i hasłem
- - Formularz do wprowadzania danych pacjenta:
++- Formularz danych pacjenta:
 +  - Imię pacjenta
    - Zakres ruchu (ROM)
    - Ból (VAS 0–10)
-   - Siła mięśni
-   - Asymetria lewa/prawa
-   - Liczba dni od urazu
--- Predykcja etapu rehabilitacji (`Ostra`, `Odbudowa`, `Funkcjonalna`, `Powrót do sportu`)  
--- Wskaźnik pewności predykcji  
--- Prosta wizualizacja wyników (wykres słupkowy lub pasek procentowy)  
-+- Predykcja etapu rehabilitacji (`Ostra`, `Odbudowa`, `Funkcjonalna`, `Powrót do sportu`)
-+- Szacowany czas powrotu do sportu (w dniach) dla etapu `Powrót do sportu`
++  - Asymetria lewa/prawa (%)
++  - Dni od urazu
++- Predykcja etapu rehabilitacji:
++  - `Ostra`
++  - `Odbudowa`
++  - `Funkcjonalna`
++  - `Powrót do sportu`
++- Szacowany czas powrotu do sportu (dni) dla etapu `Powrót do sportu`
 +- Wskaźnik pewności predykcji
-+- Wizualizacja wyników (wykres słupkowy + pasek procentowy)
-+- Zapis predykcji do historii zalogowanego lekarza (localStorage)
- - Model TensorFlow.js działający w przeglądarce (bez backendu)
++- Wykres słupkowy prawdopodobieństw klas
++- Historia predykcji lekarza zapisana lokalnie (localStorage)
  
  ---
  
@@ -36,68 +35,81 @@
 -- **Wizualizacja:** Chart.js / Recharts  
 -- **Środowisko developerskie:** VS Code  
 -- **Opcjonalnie backend:** Node.js + Express / NestJS (dla przechowywania danych pacjentów)
-+## Stack technologiczny
-+- **Frontend:** React + TypeScript, Vite
-+- **AI:** TensorFlow.js
-+- **Wizualizacja:** Recharts
-+- **Przechowywanie sesji i historii:** localStorage
+
++## Czy potrzebny jest token?
++**Nie.**
++
++Ta wersja aplikacji:
++- **nie korzysta** z zewnętrznego API AI,
++- **nie wymaga** tokena (`Bearer`, `apiKey`, itp.),
++- działa jako aplikacja frontendowa.
  
  ---
  
++## Jak działa AI lokalnie?
++1. Aplikacja używa `@tensorflow/tfjs` w przeglądarce.
++2. Model jest bootstrapowany i uczony na syntetycznych danych opartych o heurystyki.
++3. Po wpisaniu parametrów pacjenta wykonywana jest predykcja etapu rehabilitacji.
++4. Wynik + pewność + rozkład klas są wyświetlane w UI.
++5. Dane konta lekarza i historia predykcji są trzymane w `localStorage`.
++
++> Uwaga: model ma charakter wspomagający i nie zastępuje decyzji klinicznej.
++
++---
++
 +## Legenda pól formularza
 +
 +### 1) Imię pacjenta
-+- Pole identyfikacyjne do wyszukiwania wpisów w historii predykcji.
-+- Może to być pełne imię i nazwisko lub identyfikator (np. inicjały + numer).
++- Pole identyfikacyjne do wyszukiwania wpisów w historii.
++- Może być to imię i nazwisko lub ID pacjenta.
 +
 +### 2) Zakres ruchu (ROM)
 +- Zakres: **0–180** (stopnie).
-+- Im wyższa wartość, tym lepsza mobilność stawu.
-+- Niskie wartości mogą sugerować wcześniejszy etap rehabilitacji.
++- Wyższa wartość zwykle oznacza lepszą mobilność.
 +
 +### 3) Ból (VAS 0–10)
-+- VAS = Visual Analog Scale.
-+- **0** = brak bólu, **10** = ból bardzo silny / nie do zniesienia.
-+- Wyższa wartość zwykle przesuwa predykcję w stronę wcześniejszych etapów.
++- **0** = brak bólu.
++- **10** = ból bardzo silny.
 +
 +### 4) Siła mięśni (0–10)
-+- **0** = brak aktywacji mięśniowej, **10** = pełna siła funkcjonalna.
-+- Wyższa siła mięśniowa zwykle oznacza bardziej zaawansowany etap rehabilitacji.
++- **0** = brak aktywacji.
++- **10** = pełna siła funkcjonalna.
 +
 +### 5) Asymetria lewa/prawa (%)
 +- Zakres: **0–100%**.
-+- **0%** = pełna symetria stron.
-+- Wyższy procent asymetrii wskazuje większą różnicę funkcjonalną między stronami.
++- **0%** = pełna symetria.
 +
 +### 6) Dni od urazu
 +- Liczba dni od momentu kontuzji.
-+- Mniejsza liczba dni częściej koreluje z etapami wcześniejszymi, większa z etapami późniejszymi.
 +
 +---
 +
 +## Legenda odczytu wyników AI
 +
 +### Etap rehabilitacji
-+Model wybiera 1 z 4 etapów:
-+- **Ostra** – wczesny etap po urazie, zwykle wysoki ból i ograniczona funkcja.
-+- **Odbudowa** – etap przejściowy, stopniowa poprawa zakresu ruchu i siły.
-+- **Funkcjonalna** – wyraźna poprawa parametrów, rosnąca gotowość do obciążeń.
-+- **Powrót do sportu** – etap końcowy, wysoka gotowość do pełnej aktywności.
++Model wybiera jeden z 4 etapów:
++- **Ostra** – wczesna faza po urazie.
++- **Odbudowa** – poprawa funkcji i kontroli.
++- **Funkcjonalna** – wyższa gotowość do obciążeń.
++- **Powrót do sportu** – etap końcowy, najwyższa gotowość.
 +
 +### Pewność predykcji (%)
-+- Pokazuje, jak bardzo model „wierzy” w wybrany etap.
 +- Im wyższy procent, tym bardziej jednoznaczna decyzja modelu.
 +
 +### Wykres słupkowy
-+- Pokazuje rozkład prawdopodobieństw dla wszystkich 4 etapów jednocześnie.
-+- Najwyższy słupek to etap wybrany przez model.
-+- Niewielkie różnice między słupkami oznaczają bardziej niejednoznaczny przypadek.
++- Pokazuje prawdopodobieństwa wszystkich klas.
++- Najwyższy słupek = klasa wybrana przez model.
 +
 +### Szacowany czas powrotu do sportu (dni)
-+- Pokazywany tylko, gdy etap to **„Powrót do sportu”**.
-+- Jest to estymacja pomocnicza oparta o aktualne parametry wejściowe.
++- Wyświetlany tylko dla etapu **„Powrót do sportu”**.
 +
-+> Uwaga: wynik modelu ma charakter wspomagający i nie zastępuje decyzji klinicznej.
++---
++
++## Stack technologiczny
++- **Frontend:** React + TypeScript + Vite
++- **AI:** TensorFlow.js (lokalnie w przeglądarce)
++- **Wizualizacja:** Recharts
++- **Pamięć danych:** localStorage
 +
 +---
 +
@@ -107,7 +119,7 @@
 +npm run dev
 +```
 +
-+Aplikacja uruchomi się domyślnie pod adresem `http://localhost:5173`.
++Domyślny adres: `http://localhost:5173`
 +
 +## Build produkcyjny
 +```bash
